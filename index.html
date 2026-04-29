@@ -343,19 +343,27 @@ function initLevel2(){
     </div>
     <div class="card side"><h3>任務</h3><p>例如 3:4、6:8、9:12 都符合。</p></div>
   </div>`;
-  l2Success=0; setupBars("l2", false); updateBars("l2");
+  l2Success=0; l2LastAnswer=""; setupBars("l2", false); updateBars("l2");
 }
 let l2Success=0;
+let l2LastAnswer = "";
 function l2Check(){
   const r=val("l2RedInput"), b=val("l2BlueInput"), fb=document.getElementById("l2Feedback");
+  const currentAnswer = r + ":" + b;
 
   if(r*4===b*3){
+    if(currentAnswer === l2LastAnswer){
+      fb.textContent="⚠️ 這組比例剛剛用過了，請換成其他不同的等值比，例如都乘以2倍、3倍、4倍...";
+      fb.style.color="orange";
+      return;
+    }
+
+    l2LastAnswer = currentAnswer;
     l2Success++;
-    fb.textContent = "✨ 比例正確！";
+    fb.textContent = "✨ 比例正確！下一題請換不同的等值比。";
     fb.style.color="green";
     document.getElementById("l2Success").textContent=l2Success;
 
-    // 強制改變題目（避免重複）
     resetBars("l2");
 
     if(l2Success>=5) completeLevel(2);
