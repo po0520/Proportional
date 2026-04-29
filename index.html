@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>魔法學徒：邁向魔法師之路</title>
+<style>
+:root{
+  --primary:#6c5ce7;
+  --primary-dark:#4b35c7;
+  --bg:#eef4ff;
+  --card:#ffffff;
+  --text:#263238;
+  --muted:#667085;
+  --green:#16a34a;
+  --red:#dc2626;
+  --yellow:#f59e0b;
+  --blue:#2563eb;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:"Microsoft JhengHei", system-ui, sans-serif;
+  background:linear-gradient(135deg,#eef4ff,#f7f0ff);
+  color:var(--text);
+}
+header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid #e7e7f5;
+  padding:12px 16px;
+}
+.header-wrap{
+  max-width:1180px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+h1{font-size:clamp(22px,4vw,34px);margin:0;color:var(--primary-dark);}
+.progress{font-weight:700;color:var(--primary-dark);}
+main{max-width:1180px;margin:0 auto;padding:18px;}
+.card{
+  background:var(--card);
+  border-radius:22px;
+  padding:clamp(14px,3vw,24px);
+  box-shadow:0 8px 24px rgba(27,31,59,.12);
+}
+.home{
+  display:grid;
+  grid-template-columns:1fr 1.2fr;
+  gap:20px;
+  align-items:center;
+}
+.hero{font-size:88px;text-align:center;}
+.btn{
+  border:none;
+  border-radius:14px;
+  background:var(--primary);
+  color:white;
+  font-size:18px;
+  font-weight:700;
+  padding:12px 18px;
+  cursor:pointer;
+  margin:6px;
+}
+.btn:hover{background:var(--primary-dark);}
+.btn.secondary{background:#e9e7ff;color:var(--primary-dark);}
+.btn.danger{background:#ef4444;}
+.level-nav{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:10px;
+  margin:16px 0;
+}
+.level-btn{
+  border:2px solid #ded9ff;
+  background:white;
+  color:var(--primary-dark);
+  border-radius:16px;
+  padding:10px;
+  font-weight:800;
+  cursor:pointer;
+}
+.level-btn.active{background:var(--primary);color:white;}
+.level-btn.locked{opacity:.45;cursor:not-allowed;}
+.screen{display:none;}
+.screen.active{display:block;}
+.layout{
+  display:grid;
+  grid-template-columns:240px 1fr 260px;
+  gap:16px;
+  align-items:start;
+}
+.side{font-size:16px;line-height:1.6;}
+.wizard{font-size:76px;text-align:center;}
+.panel{text-align:center;}
+.ratio{
+  font-size:clamp(24px,4.5vw,36px);
+  font-weight:900;
+  color:var(--primary-dark);
+  margin:8px 0 12px;
+}
+.status-row{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+  font-weight:800;
+  margin:10px 0;
+}
+.pill{
+  background:#f1efff;
+  color:var(--primary-dark);
+  padding:8px 12px;
+  border-radius:999px;
+}
+.feedback{
+  min-height:34px;
+  font-size:clamp(18px,3vw,24px);
+  font-weight:900;
+  margin-top:12px;
+}
+.bar-area{
+  display:flex;
+  justify-content:center;
+  align-items:flex-end;
+  gap:clamp(24px,8vw,70px);
+  height:270px;
+  border-bottom:4px solid #333;
+  margin:18px auto;
+  max-width:480px;
+}
+.bar-box{
+  width:clamp(70px,18vw,100px);
+  height:220px;
+  border:3px solid #555;
+  border-radius:10px 10px 0 0;
+  display:flex;
+  align-items:flex-end;
+  background:#f8fafc;
+  overflow:hidden;
+}
+.bar{width:100%;transition:.2s;}
+.red{background:#ff6b6b;}
+.blue{background:#4b7bec;}
+input[type=range]{width:min(180px,35vw);}
+input[type=number]{
+  width:110px;
+  font-size:24px;
+  text-align:center;
+  padding:8px;
+  border:3px solid var(--primary);
+  border-radius:12px;
+}
+.dice{
+  width:90px;height:90px;margin:10px auto;border-radius:18px;background:white;border:4px solid #333;
+  display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:900;
+}
+.roll{animation:spin .8s ease;}
+@keyframes spin{0%{transform:rotate(0) scale(1);}30%{transform:rotate(180deg) scale(1.18);}60%{transform:rotate(360deg) scale(.9);}100%{transform:rotate(720deg) scale(1);}}
+.magic{font-size:70px;margin:10px;}
+.hint{background:#fff7d6;border-radius:14px;padding:12px;margin-top:12px;display:none;}
+.grid-wrap{overflow:auto;padding-bottom:6px;}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(10, minmax(38px,54px));
+  gap:6px;
+  justify-content:center;
+  min-width:440px;
+}
+.cell{
+  aspect-ratio:1;
+  border:none;
+  border-radius:12px;
+  background:#f7f7ff;
+  box-shadow:inset 0 0 0 2px #d7d1ff;
+  font-size:clamp(16px,3vw,22px);
+  font-weight:900;
+  cursor:pointer;
+}
+.cell.selected{background:#ffeaa7;box-shadow:inset 0 0 0 4px #fdcb6e;}
+.cell.empty{background:#e8eef5;color:transparent;cursor:default;}
+.cell.correct{animation:pop .35s ease;background:#b8f7c2;}
+.cell.wrong{animation:shake .3s ease;background:#ffc9c9;}
+@keyframes pop{50%{transform:scale(1.15);}}
+@keyframes shake{25%{transform:translateX(-4px);}50%{transform:translateX(4px);}75%{transform:translateX(-4px);}}
+.rank-box{display:none;background:#fff7d6;border-radius:14px;padding:14px;margin-top:12px;text-align:center;}
+.small{color:var(--muted);font-size:14px;}
+@media(max-width:900px){
+  .home{grid-template-columns:1fr;}
+  .layout{grid-template-columns:1fr;}
+  .side{order:2;}
+  .panel{order:1;}
+  .level-nav{grid-template-columns:repeat(3,1fr);}
+}
+@media(max-width:560px){
+  main{padding:10px;}
+  .level-nav{grid-template-columns:repeat(2,1fr);}
+  .bar-area{height:235px;}
+  .bar-box{height:190px;}
+  .btn{width:100%;margin:5px 0;}
+  .hero{font-size:66px;}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-wrap">
+    <h1>🧙‍♂️ 魔法學徒：邁向魔法師之路</h1>
+    <div class="progress">目前關卡：<span id="currentLevelLabel">首頁</span></div>
+  </div>
+</header>
+
+<main>
+  <section id="home" class="screen active">
+    <div class="card home">
+      <div>
+        <div class="hero">🧪✨</div>
+      </div>
+      <div>
+        <h2>歡迎進入比例魔法學院</h2>
+        <p>你是一位魔法學徒，必須通過五個比例試煉，才能成為真正的魔法師。</p>
+        <p>學習路線：調配倍數 → 等值比 → 總量分配 → 解未知數 → 技能地圖考驗。</p>
+        <button class="btn" onclick="startAdventure()">從第一關開始遊戲</button>
+        <button class="btn secondary" onclick="resetAll()">重置進度</button>
+      </div>
+    </div>
+  </section>
+
+  <nav class="level-nav" id="levelNav"></nav>
+
+  <section id="level1" class="screen"></section>
+  <section id="level2" class="screen"></section>
+  <section id="level3" class="screen"></section>
+  <section id="level4" class="screen"></section>
+  <section id="level5" class="screen"></section>
+</main>
+
+<script>
+let unlockedLevel = 1;
+let activeLevel = 0;
+const levelNames = ["調配藥水", "等值比試煉", "總量比例", "未知數魔法陣", "技能地圖考驗"];
+
+function buildNav(){
+  const nav = document.getElementById("levelNav");
+  nav.innerHTML = "";
+  for(let i=1;i<=5;i++){
+    const b=document.createElement("button");
+    b.className="level-btn" + (activeLevel===i?" active":"") + (i>unlockedLevel?" locked":"");
+    b.textContent = (i>unlockedLevel?"🔒 ":"") + "第"+i+"關\n"+levelNames[i-1];
+    b.onclick=()=>{ if(i<=unlockedLevel) showLevel(i); };
+    nav.appendChild(b);
+  }
+}
+function hideScreens(){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));}
+function startAdventure(){showLevel(1);}
+function showHome(){activeLevel=0;hideScreens();document.getElementById("home").classList.add("active");document.getElementById("currentLevelLabel").textContent="首頁";buildNav();}
+function showLevel(n){
+  activeLevel=n; hideScreens(); document.getElementById("level"+n).classList.add("active");
+  document.getElementById("currentLevelLabel").textContent="第"+n+"關："+levelNames[n-1];
+  buildNav();
+  if(n===1) initLevel1();
+  if(n===2) initLevel2();
+  if(n===3) initLevel3();
+  if(n===4) initLevel4();
+  if(n===5) initLevel5();
+}
+function completeLevel(n){
+  if(unlockedLevel < n+1) unlockedLevel = Math.min(5,n+1);
+  buildNav();
+  const fb=document.querySelector(`#level${n} .feedback`);
+  if(fb){fb.textContent="🎉 第"+n+"關完成！已解鎖下一關。";fb.style.color="green";}
+}
+function resetAll(){
+  unlockedLevel=1; activeLevel=0; clearLevel5Timer(); buildNav(); showHome();
+}
+
+/* Level 1 */
+function initLevel1(){
+  document.getElementById("level1").innerHTML=`
+  <div class="layout">
+    <div class="card side"><div class="wizard">🧙‍♂️</div><h3>第一關</h3><p>翻轉骰子後，依照指定倍數調配紅藍墨水。</p></div>
+    <div class="card panel">
+      <div class="ratio">紅色墨水 : 藍色墨水 = 2 : 3</div>
+      <div class="status-row"><span class="pill">成功：<span id="l1Success">0</span>/5</span></div>
+      <div id="l1Dice" class="dice">?</div><button class="btn" onclick="l1Roll()">翻轉骰子出題</button>
+      <h3 id="l1Task">請先翻轉骰子</h3>
+      ${barHTML("l1")}
+      <button class="btn" onclick="l1Check()">確認調配</button>
+      <div class="feedback" id="l1Feedback"></div>
+    </div>
+    <div class="card side"><h3>任務</h3><ol><li>先翻骰子</li><li>看倍數</li><li>自己算出紅藍墨水</li><li>成功5次過關</li></ol></div>
+  </div>`;
+  l1Success=0; l1Multiplier=0; setupBars("l1", true); updateBars("l1");
+}
+let l1Success=0,l1Multiplier=0;
+function l1Roll(){
+  const dice=document.getElementById("l1Dice"); dice.classList.remove("roll"); void dice.offsetWidth; dice.classList.add("roll");
+  document.getElementById("l1Feedback").textContent=""; document.getElementById("l1Task").textContent="骰子翻轉中……";
+  disableBars("l1",true);
+  setTimeout(()=>{l1Multiplier=Math.floor(Math.random()*5)+2; dice.textContent="×"+l1Multiplier; document.getElementById("l1Task").textContent="骰子翻出 ×"+l1Multiplier+"，請依比例自己調配"; resetBars("l1"); disableBars("l1",false);},800);
+}
+function l1Check(){
+  const r=val("l1RedInput"), b=val("l1BlueInput"), fb=document.getElementById("l1Feedback");
+  if(!l1Multiplier){fb.textContent="請先翻轉骰子！";fb.style.color="orange";return;}
+  if(r===2*l1Multiplier && b===3*l1Multiplier){l1Success++;fb.textContent="✨ 正確！";fb.style.color="green";document.getElementById("l1Success").textContent=l1Success;if(l1Success>=5) completeLevel(1);} 
+  else {fb.textContent="💨 再試一次！";fb.style.color="red";}
+}
+
+/* Level 2 */
+function initLevel2(){
+  document.getElementById("level2").innerHTML=`
+  <div class="layout">
+    <div class="card side"><div class="wizard">🧙‍♂️</div><h3>第二關</h3><p>這次沒有標準答案，只要符合 3 : 4 的等值比就成功。</p></div>
+    <div class="card panel">
+      <div class="ratio">紅色墨水 : 藍色墨水 = 3 : 4</div>
+      <div class="status-row"><span class="pill">成功：<span id="l2Success">0</span>/5</span></div>
+      <h3>請自由調配墨水</h3>
+      ${barHTML("l2")}
+      <button class="btn" onclick="l2Check()">確認配方</button>
+      <div class="feedback" id="l2Feedback"></div>
+    </div>
+    <div class="card side"><h3>任務</h3><p>例如 3:4、6:8、9:12 都符合。</p></div>
+  </div>`;
+  l2Success=0; setupBars("l2", false); updateBars("l2");
+}
+let l2Success=0;
+function l2Check(){
+  const r=val("l2RedInput"), b=val("l2BlueInput"), fb=document.getElementById("l2Feedback");
+  if(r*4===b*3){l2Success++; fb.textContent = r===3&&b===4?"✨ 正確！（最簡比例）":"✨ 比例正確！"; fb.style.color="green"; document.getElementById("l2Success").textContent=l2Success; if(l2Success>=5) completeLevel(2);} 
+  else {fb.textContent="💨 比例不對，再試試！";fb.style.color="red";}
+}
+
+/* Level 3 */
+let l3Success=0,l3Total=20;
+function initLevel3(){
+  document.getElementById("level3").innerHTML=`
+  <div class="layout">
+    <div class="card side"><div class="wizard">🧙‍♂️</div><h3>第三關</h3><p>已知總量，分配紅藍墨水。</p></div>
+    <div class="card panel">
+      <div class="ratio">比例 3 : 4</div>
+      <div class="status-row"><span class="pill">成功：<span id="l3Success">0</span>/5</span></div>
+      <h2 id="l3Question"></h2>
+      <p>紅色：<input id="l3Red" type="number" min="0"> 藍色：<input id="l3Blue" type="number" min="0"></p>
+      <button class="btn" onclick="l3Check()">確認</button><button class="btn secondary" onclick="l3New()">換一題</button>
+      <div class="feedback" id="l3Feedback"></div>
+    </div>
+    <div class="card side"><h3>提示</h3><p>先把比例 3+4 分成 7 份，再依總量分配。</p></div>
+  </div>`;
+  l3Success=0; l3New();
+}
+function l3New(){const totals=[28,56,84,112,140]; l3Total=totals[Math.floor(Math.random()*totals.length)]; document.getElementById("l3Question").textContent="總量 = "+l3Total+"，紅藍各多少？"; document.getElementById("l3Red").value=""; document.getElementById("l3Blue").value=""; document.getElementById("l3Feedback").textContent="";}
+function l3Check(){
+  const unit=l3Total/7, cr=3*unit, cb=4*unit, r=val("l3Red"), b=val("l3Blue"), fb=document.getElementById("l3Feedback");
+  if(r===cr&&b===cb){l3Success++; fb.textContent="✨ 正確！"; fb.style.color="green"; document.getElementById("l3Success").textContent=l3Success; if(l3Success>=5) completeLevel(3); else setTimeout(l3New,900);} 
+  else {fb.textContent="💨 再試試！想想總量怎麼分成7份。";fb.style.color="red";}
+}
+
+/* Level 4 */
+let l4Success=0,l4Answer=0,l4Hint="",l4Done=false;
+function initLevel4(){
+  document.getElementById("level4").innerHTML=`
+  <div class="layout">
+    <div class="card side"><div class="wizard">🧙‍♂️</div><h3>第四關</h3><p>解出比例式中的未知數 x。</p></div>
+    <div class="card panel">
+      <div class="status-row"><span class="pill">成功：<span id="l4Success">0</span>/5</span></div>
+      <div class="magic" id="l4Magic">🧪</div>
+      <h2>請解出未知數 x</h2>
+      <div class="ratio" id="l4Question"></div>
+      <p>x = <input id="l4Input" type="number" min="0"></p>
+      <button class="btn" onclick="l4Check()">確認答案</button><button class="btn secondary" onclick="l4ShowHint()">提示</button><button class="btn secondary" onclick="l4New()">換一題</button>
+      <div class="hint" id="l4Hint"></div><div class="feedback" id="l4Feedback"></div>
+    </div>
+    <div class="card side"><h3>方法</h3><p>可以用等值比，也可以用交叉相乘。</p></div>
+  </div>`;
+  l4Success=0; l4New();
+}
+function l4New(){
+  l4Done=false; document.getElementById("l4Input").value=""; document.getElementById("l4Feedback").textContent=""; document.getElementById("l4Hint").style.display="none"; document.getElementById("l4Magic").textContent="🧪";
+  const k=Math.floor(Math.random()*8)+2, red=3*k, blue=4*k, type=Math.floor(Math.random()*4);
+  let q="";
+  if(type===0){q=`3 : 4 = x : ${blue}`; l4Answer=red; l4Hint=`4 變成 ${blue}，放大了幾倍？`;}
+  else if(type===1){q=`3 : 4 = ${red} : x`; l4Answer=blue; l4Hint=`3 變成 ${red}，放大了幾倍？`;}
+  else if(type===2){q=`x : 4 = ${red} : ${blue}`; l4Answer=3; l4Hint=`${red} : ${blue} 可以化簡回 3 : 4。`;}
+  else{q=`3 : x = ${red} : ${blue}`; l4Answer=4; l4Hint=`${red} : ${blue} 可以化簡回 3 : 4。`;}
+  document.getElementById("l4Question").textContent=q;
+}
+function l4Check(){
+  const fb=document.getElementById("l4Feedback"); if(l4Done){fb.textContent="這題已完成，請換下一題！";fb.style.color=varColor();return;}
+  if(val("l4Input")===l4Answer){l4Done=true;l4Success++;document.getElementById("l4Success").textContent=l4Success;document.getElementById("l4Magic").textContent="🔮";fb.textContent="✨ 正確！";fb.style.color="green";if(l4Success>=5) completeLevel(4); else setTimeout(l4New,900);} 
+  else {document.getElementById("l4Magic").textContent="☁️";fb.textContent="💨 不對，再想想比例怎麼放大或化簡。";fb.style.color="red";}
+}
+function l4ShowHint(){const h=document.getElementById("l4Hint");h.textContent=l4Hint;h.style.display="block";}
+function varColor(){return "#5b3cc4";}
+
+/* Level 5 */
+let l5Grid=[],l5Selected=[],l5Score=0,l5Streak=0,l5Time=120,l5Timer=null,l5Playing=false;
+function initLevel5(){
+  clearLevel5Timer();
+  document.getElementById("level5").innerHTML=`
+  <div class="layout">
+    <div class="card side"><div class="wizard">🧙‍♂️</div><h3>第五關</h3><p>找出符合 2 : 3 的數字組合，消除得分。</p></div>
+    <div class="card panel">
+      <div class="ratio">藥水配方：2 : 3</div>
+      <div class="status-row"><span class="pill">時間：<span id="l5Time">120</span>秒</span><span class="pill">分數：<span id="l5Score">0</span></span><span class="pill">連擊：<span id="l5Streak">0</span>/3</span><span class="pill">已選：<span id="l5SelectedText">尚未選取</span></span></div>
+      <button class="btn" onclick="l5Start()">開始考驗</button><button class="btn secondary" onclick="l5Reset()">重新開始</button>
+      <div class="grid-wrap"><div id="l5Grid" class="grid"></div></div>
+      <div class="feedback" id="l5Feedback">按下開始考驗，展開配方魔法！</div>
+      <div id="l5RankBox" class="rank-box"><div id="l5Badge" style="font-size:42px">🏅</div><h2 id="l5RankTitle"></h2><p id="l5RankMsg"></p></div>
+    </div>
+    <div class="card side"><h3>排行</h3><p>80+ 傳奇魔法師<br>60+ 高階魔法師<br>40+ 中階魔法師<br>20+ 見習魔法師</p></div>
+  </div>`;
+  l5Reset();
+}
+function clearLevel5Timer(){if(l5Timer){clearInterval(l5Timer);l5Timer=null;}}
+function l5Rand(){return Math.floor(Math.random()*30)+1;}
+function l5Useful(){const k=Math.floor(Math.random()*10)+1;return Math.random()<.5?2*k:3*k;}
+function l5Create(){l5Grid=[];for(let i=0;i<100;i++)l5Grid.push(Math.random()<.65?l5Useful():l5Rand());l5Render();}
+function l5Render(){const g=document.getElementById("l5Grid"); if(!g)return; g.innerHTML=""; l5Grid.forEach((num,i)=>{const c=document.createElement("button");c.className="cell";c.textContent=num===null?"":num;if(num===null)c.classList.add("empty");if(l5Selected.includes(i))c.classList.add("selected");c.onclick=()=>l5Select(i);g.appendChild(c);});}
+function l5Select(i){if(!l5Playing||l5Grid[i]===null||l5Selected.includes(i))return;l5Selected.push(i);l5Update();l5Render();if(l5Selected.length===2)l5CheckPair();}
+function l5CheckPair(){
+  const [i1,i2]=l5Selected,n1=l5Grid[i1],n2=l5Grid[i2],ok=(n1*3===n2*2)||(n2*3===n1*2),cells=document.querySelectorAll("#l5Grid .cell"),fb=document.getElementById("l5Feedback");
+  if(ok){l5Score+=10;l5Streak++;cells[i1].classList.add("correct");cells[i2].classList.add("correct");fb.textContent="✨ 配方成功！";fb.style.color="green";setTimeout(()=>{l5Grid[i1]=null;l5Grid[i2]=null;l5Selected=[];if(l5Streak>=3){l5Refill();l5Streak=0;fb.textContent="🌟 3連擊！技能地圖補充新數字！";}l5Update();l5Render();},420);} 
+  else {l5Score=Math.max(0,l5Score-2);l5Streak=0;cells[i1].classList.add("wrong");cells[i2].classList.add("wrong");fb.textContent="💨 這兩個數字不是 2 : 3。";fb.style.color="red";setTimeout(()=>{l5Selected=[];l5Update();l5Render();},480);} l5Update();
+}
+function l5Refill(){l5Grid=l5Grid.map(n=>n===null?(Math.random()<.7?l5Useful():l5Rand()):n);}
+function l5Update(){document.getElementById("l5Time").textContent=l5Time;document.getElementById("l5Score").textContent=l5Score;document.getElementById("l5Streak").textContent=l5Streak;document.getElementById("l5SelectedText").textContent=l5Selected.length?l5Selected.map(i=>l5Grid[i]).join("、"):"尚未選取";}
+function l5Start(){if(l5Playing)return;l5Playing=true;document.getElementById("l5RankBox").style.display="none";document.getElementById("l5Feedback").textContent="開始尋找符合 2 : 3 的魔法數字！";clearLevel5Timer();l5Timer=setInterval(()=>{l5Time--;l5Update();if(l5Time<=0)l5End();},1000);}
+function l5End(){clearLevel5Timer();l5Playing=false;l5Selected=[];l5Render();l5Rank();completeLevel(5);}
+function l5Rank(){let title,badge,msg;if(l5Score>=80){title="傳奇魔法師";badge="🏆";msg="你已精通比例配方魔法！";}else if(l5Score>=60){title="高階魔法師";badge="🥇";msg="你的比例判斷非常熟練！";}else if(l5Score>=40){title="中階魔法師";badge="🥈";msg="你已能穩定辨認等值比。";}else if(l5Score>=20){title="見習魔法師";badge="🥉";msg="再多練習，就能更快找到比例配方。";}else{title="魔法學徒";badge="🧙‍♂️";msg="先從 2:3、4:6、6:9 開始觀察。";}document.getElementById("l5Badge").textContent=badge;document.getElementById("l5RankTitle").textContent=title;document.getElementById("l5RankMsg").textContent="最終分數："+l5Score+"。"+msg;document.getElementById("l5RankBox").style.display="block";document.getElementById("l5Feedback").textContent="⏰ 時間到！查看你的魔法師排行。";}
+function l5Reset(){clearLevel5Timer();l5Playing=false;l5Score=0;l5Streak=0;l5Time=120;l5Selected=[];const rb=document.getElementById("l5RankBox");if(rb)rb.style.display="none";l5Create();l5Update();}
+
+/* shared bars */
+function barHTML(prefix){return `<div class="bar-area"><div><div class="bar-box"><div id="${prefix}RedBar" class="bar red"></div></div><p>紅色：<span id="${prefix}RedValue">1</span> 格</p><input id="${prefix}RedInput" type="range" min="1" max="20" value="1"></div><div><div class="bar-box"><div id="${prefix}BlueBar" class="bar blue"></div></div><p>藍色：<span id="${prefix}BlueValue">1</span> 格</p><input id="${prefix}BlueInput" type="range" min="1" max="20" value="1"></div></div>`;}
+function setupBars(prefix,disabled){document.getElementById(prefix+"RedInput").addEventListener("input",()=>updateBars(prefix));document.getElementById(prefix+"BlueInput").addEventListener("input",()=>updateBars(prefix));disableBars(prefix,disabled);}
+function updateBars(prefix){const r=val(prefix+"RedInput"),b=val(prefix+"BlueInput");document.getElementById(prefix+"RedValue").textContent=r;document.getElementById(prefix+"BlueValue").textContent=b;document.getElementById(prefix+"RedBar").style.height=(r*10)+"px";document.getElementById(prefix+"BlueBar").style.height=(b*10)+"px";}
+function resetBars(prefix){document.getElementById(prefix+"RedInput").value=1;document.getElementById(prefix+"BlueInput").value=1;updateBars(prefix);}
+function disableBars(prefix,disabled){document.getElementById(prefix+"RedInput").disabled=disabled;document.getElementById(prefix+"BlueInput").disabled=disabled;}
+function val(id){return Number(document.getElementById(id).value);}
+
+buildNav();
+</script>
+</body>
+</html>
