@@ -228,7 +228,7 @@ input[type=number]{
       <div>
         <h2>歡迎進入比例魔法學院</h2>
         <p>你是一位魔法學徒，必須通過五個比例試煉，才能成為真正的魔法師。</p>
-        <p>學習路線：調配倍數 → 等值比 → 總量分配 → 解未知數 → 技能地圖考驗。</p>
+        <p>學習路線：調配倍數 → 等值比 → 解未知數 → 總量分配 → 技能地圖考驗。</p>
         <button class="btn" onclick="startAdventure()">從第一關開始遊戲</button>
         <button class="btn secondary" onclick="resetAll()">重置進度</button>
       </div>
@@ -311,8 +311,21 @@ function l1Roll(){
 function l1Check(){
   const r=val("l1RedInput"), b=val("l1BlueInput"), fb=document.getElementById("l1Feedback");
   if(!l1Multiplier){fb.textContent="請先翻轉骰子！";fb.style.color="orange";return;}
-  if(r===2*l1Multiplier && b===3*l1Multiplier){l1Success++;fb.textContent="✨ 正確！";fb.style.color="green";document.getElementById("l1Success").textContent=l1Success;if(l1Success>=5) completeLevel(1);} 
-  else {fb.textContent="💨 再試一次！";fb.style.color="red";}
+
+  if(r===2*l1Multiplier && b===3*l1Multiplier){
+    l1Success++;
+    fb.textContent="✨ 正確！";
+    fb.style.color="green";
+    document.getElementById("l1Success").textContent=l1Success;
+    l1Multiplier = 0; // 強制重新擲骰
+    document.getElementById("l1Task").textContent="請再次翻轉骰子";
+    disableBars("l1",true);
+
+    if(l1Success>=5) completeLevel(1);
+  } else {
+    fb.textContent="💨 再試一次！";
+    fb.style.color="red";
+  }
 }
 
 /* Level 2 */
@@ -335,9 +348,22 @@ function initLevel2(){
 let l2Success=0;
 function l2Check(){
   const r=val("l2RedInput"), b=val("l2BlueInput"), fb=document.getElementById("l2Feedback");
-  if(r*4===b*3){l2Success++; fb.textContent = r===3&&b===4?"✨ 正確！（最簡比例）":"✨ 比例正確！"; fb.style.color="green"; document.getElementById("l2Success").textContent=l2Success; if(l2Success>=5) completeLevel(2);} 
-  else {fb.textContent="💨 比例不對，再試試！";fb.style.color="red";}
-}
+
+  if(r*4===b*3){
+    l2Success++;
+    fb.textContent = "✨ 比例正確！";
+    fb.style.color="green";
+    document.getElementById("l2Success").textContent=l2Success;
+
+    // 強制改變題目（避免重複）
+    resetBars("l2");
+
+    if(l2Success>=5) completeLevel(2);
+  } else {
+    fb.textContent="💨 比例不對，再試試！";
+    fb.style.color="red";
+  }
+} 
 
 /* Level 3 */
 let l3Success=0,l3Total=20;
