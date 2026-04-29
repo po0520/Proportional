@@ -414,7 +414,7 @@ function initLevel5(){
       <div class="feedback" id="l5Feedback">按下開始考驗，展開配方魔法！</div>
       <div id="l5RankBox" class="rank-box"><div id="l5Badge" style="font-size:42px">🏅</div><h2 id="l5RankTitle"></h2><p id="l5RankMsg"></p></div>
     </div>
-    <div class="card side"><h3>排行</h3><p>80+ 傳奇魔法師<br>60+ 高階魔法師<br>40+ 中階魔法師<br>20+ 見習魔法師</p></div>
+    <div class="card side"><h3>排行</h3><p>200分以上：傳奇魔法師<br>150～199分：高階魔法師<br>100～149分：中階魔法師<br>50～99分：見習魔法師<br>0～49分：魔法學徒</p></div>
   </div>`;
   l5Reset();
 }
@@ -433,7 +433,7 @@ function l5Refill(){l5Grid=l5Grid.map(n=>n===null?(Math.random()<.7?l5Useful():l
 function l5Update(){document.getElementById("l5Time").textContent=l5Time;document.getElementById("l5Score").textContent=l5Score;document.getElementById("l5Streak").textContent=l5Streak;document.getElementById("l5SelectedText").textContent=l5Selected.length?l5Selected.map(i=>l5Grid[i]).join("、"):"尚未選取";}
 function l5Start(){if(l5Playing)return;l5Playing=true;document.getElementById("l5RankBox").style.display="none";document.getElementById("l5Feedback").textContent="開始尋找符合 2 : 3 的魔法數字！";clearLevel5Timer();l5Timer=setInterval(()=>{l5Time--;l5Update();if(l5Time<=0)l5End();},1000);}
 function l5End(){clearLevel5Timer();l5Playing=false;l5Selected=[];l5Render();l5Rank();completeLevel(5);}
-function l5Rank(){let title,badge,msg;if(l5Score>=80){title="傳奇魔法師";badge="🏆";msg="你已精通比例配方魔法！";}else if(l5Score>=60){title="高階魔法師";badge="🥇";msg="你的比例判斷非常熟練！";}else if(l5Score>=40){title="中階魔法師";badge="🥈";msg="你已能穩定辨認等值比。";}else if(l5Score>=20){title="見習魔法師";badge="🥉";msg="再多練習，就能更快找到比例配方。";}else{title="魔法學徒";badge="🧙‍♂️";msg="先從 2:3、4:6、6:9 開始觀察。";}document.getElementById("l5Badge").textContent=badge;document.getElementById("l5RankTitle").textContent=title;document.getElementById("l5RankMsg").textContent="最終分數："+l5Score+"。"+msg;document.getElementById("l5RankBox").style.display="block";document.getElementById("l5Feedback").textContent="⏰ 時間到！查看你的魔法師排行。";}
+function l5Rank(){let title,badge,msg;if(l5Score>=200){title="傳奇魔法師";badge="🏆";msg="你已精通比例配方魔法！";}else if(l5Score>=150){title="高階魔法師";badge="🥇";msg="你的比例判斷非常熟練！";}else if(l5Score>=100){title="中階魔法師";badge="🥈";msg="你已能穩定辨認等值比。";}else if(l5Score>=50){title="見習魔法師";badge="🥉";msg="再多練習，就能更快找到比例配方。";}else{title="魔法學徒";badge="🧙‍♂️";msg="先從 2:3、4:6、6:9 開始觀察。";}document.getElementById("l5Badge").textContent=badge;document.getElementById("l5RankTitle").textContent=title;document.getElementById("l5RankMsg").textContent="最終分數："+l5Score+"。"+msg;document.getElementById("l5RankBox").style.display="block";document.getElementById("l5Feedback").textContent="⏰ 時間到！查看你的魔法師排行。";}
 function l5Reset(){clearLevel5Timer();l5Playing=false;l5Score=0;l5Streak=0;l5Time=120;l5Selected=[];const rb=document.getElementById("l5RankBox");if(rb)rb.style.display="none";l5Create();l5Update();}
 
 /* shared bars */
