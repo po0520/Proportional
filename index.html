@@ -245,7 +245,7 @@ input[type=number]{
 <script>
 let unlockedLevel = 1;
 let activeLevel = 0;
-const levelNames = ["調配藥水", "等值比試煉", "總量比例", "未知數魔法陣", "技能地圖考驗"];
+const levelNames = ["調配藥水", "等值比試煉", "未知數魔法陣", "總量比例", "技能地圖考驗"];
 
 function buildNav(){
   const nav = document.getElementById("levelNav");
@@ -267,8 +267,8 @@ function showLevel(n){
   buildNav();
   if(n===1) initLevel1();
   if(n===2) initLevel2();
-  if(n===3) initLevel3();
-  if(n===4) initLevel4();
+  if(n===3) initLevel4();
+  if(n===4) initLevel3();
   if(n===5) initLevel5();
 }
 function completeLevel(n){
@@ -342,7 +342,7 @@ let l3Success=0,l3Total=20;
 function initLevel3(){
   document.getElementById("level3").innerHTML=`
   <div class="layout">
-    <div class="card side"><div class="wizard">🧙‍♂️</div><h3>第三關</h3><p>已知總量，分配紅藍墨水。</p></div>
+    <div class="card side"><div class="wizard">🧙‍♂️</div><h3>第四關</h3><p>已知總量，分配紅藍墨水。</p></div>
     <div class="card panel">
       <div class="ratio">比例 3 : 4</div>
       <div class="status-row"><span class="pill">成功：<span id="l3Success">0</span>/5</span></div>
@@ -358,7 +358,7 @@ function initLevel3(){
 function l3New(){const totals=[28,56,84,112,140]; l3Total=totals[Math.floor(Math.random()*totals.length)]; document.getElementById("l3Question").textContent="總量 = "+l3Total+"，紅藍各多少？"; document.getElementById("l3Red").value=""; document.getElementById("l3Blue").value=""; document.getElementById("l3Feedback").textContent="";}
 function l3Check(){
   const unit=l3Total/7, cr=3*unit, cb=4*unit, r=val("l3Red"), b=val("l3Blue"), fb=document.getElementById("l3Feedback");
-  if(r===cr&&b===cb){l3Success++; fb.textContent="✨ 正確！"; fb.style.color="green"; document.getElementById("l3Success").textContent=l3Success; if(l3Success>=5) completeLevel(3); else setTimeout(l3New,900);} 
+  if(r===cr&&b===cb){l3Success++; fb.textContent="✨ 正確！"; fb.style.color="green"; document.getElementById("l3Success").textContent=l3Success; if(l3Success>=5) completeLevel(4); else setTimeout(l3New,900);} 
   else {fb.textContent="💨 再試試！想想總量怎麼分成7份。";fb.style.color="red";}
 }
 
@@ -367,7 +367,7 @@ let l4Success=0,l4Answer=0,l4Hint="",l4Done=false;
 function initLevel4(){
   document.getElementById("level4").innerHTML=`
   <div class="layout">
-    <div class="card side"><div class="wizard">🧙‍♂️</div><h3>第四關</h3><p>解出比例式中的未知數 x。</p></div>
+    <div class="card side"><div class="wizard">🧙‍♂️</div><h3>第三關</h3><p>解出比例式中的未知數 x。</p></div>
     <div class="card panel">
       <div class="status-row"><span class="pill">成功：<span id="l4Success">0</span>/5</span></div>
       <div class="magic" id="l4Magic">🧪</div>
@@ -393,7 +393,7 @@ function l4New(){
 }
 function l4Check(){
   const fb=document.getElementById("l4Feedback"); if(l4Done){fb.textContent="這題已完成，請換下一題！";fb.style.color=varColor();return;}
-  if(val("l4Input")===l4Answer){l4Done=true;l4Success++;document.getElementById("l4Success").textContent=l4Success;document.getElementById("l4Magic").textContent="🔮";fb.textContent="✨ 正確！";fb.style.color="green";if(l4Success>=5) completeLevel(4); else setTimeout(l4New,900);} 
+  if(val("l4Input")===l4Answer){l4Done=true;l4Success++;document.getElementById("l4Success").textContent=l4Success;document.getElementById("l4Magic").textContent="🔮";fb.textContent="✨ 正確！";fb.style.color="green";if(l4Success>=5) completeLevel(3); else setTimeout(l4New,900);} 
   else {document.getElementById("l4Magic").textContent="☁️";fb.textContent="💨 不對，再想想比例怎麼放大或化簡。";fb.style.color="red";}
 }
 function l4ShowHint(){const h=document.getElementById("l4Hint");h.textContent=l4Hint;h.style.display="block";}
