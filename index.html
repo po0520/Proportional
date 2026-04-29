@@ -130,21 +130,23 @@ main{max-width:1180px;margin:0 auto;padding:18px;}
   display:flex;
   justify-content:center;
   align-items:flex-end;
-  gap:clamp(24px,8vw,70px);
-  height:270px;
+  gap:clamp(32px,8vw,80px);
+  min-height:330px;
   border-bottom:4px solid #333;
-  margin:18px auto;
-  max-width:480px;
+  margin:28px auto 18px;
+  max-width:560px;
+  padding:0 16px 18px;
 }
 .bar-box{
-  width:clamp(70px,18vw,100px);
-  height:220px;
+  width:clamp(80px,18vw,110px);
+  height:230px;
   border:3px solid #555;
   border-radius:10px 10px 0 0;
   display:flex;
   align-items:flex-end;
   background:#f8fafc;
   overflow:hidden;
+  margin:0 auto 14px;
 }
 .bar{width:100%;transition:.2s;}
 .red{background:#ff6b6b;}
@@ -202,8 +204,8 @@ input[type=number]{
 @media(max-width:560px){
   main{padding:10px;}
   .level-nav{grid-template-columns:repeat(2,1fr);}
-  .bar-area{height:235px;}
-  .bar-box{height:190px;}
+  .bar-area{min-height:300px;gap:22px;padding-bottom:16px;}
+  .bar-box{height:200px;width:78px;}
   .btn{width:100%;margin:5px 0;}
   .hero{font-size:66px;}
 }
